@@ -123,7 +123,7 @@ async function create(vm) {
     {
       op: "add",
       path: "/fields/System.Title",
-      value: vm.title + " (GitHub Issue #" + vm.number + ")",
+      value: "GH-" + vm.number + " " + vm.title,
     },
     {
       op: "add",
