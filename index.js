@@ -92,10 +92,10 @@ async function main() {
         console.log("assigned action is not yet implemented");
         break;
       case "labeled":
-        workItem != null ? await label(vm, workItem) : "";
+        workItem != null && labelMonitored(workItem) ? await label(vm, workItem) : "";
         break;
       case "unlabeled":
-        workItem != null ? await unlabel(vm, workItem) : "";
+        workItem != null && labelMonitored(workItem) ? await unlabel(vm, workItem) : "";
         break;
       case "deleted":
         console.log("deleted action is not yet implemented");
@@ -553,4 +553,11 @@ function getValuesFromPayload(payload, env) {
   }
 
   return vm;
+}
+
+function labelMonitored(workItem) {
+  if (workItem != null) {
+    return ['archaeopteryx'].includes(workItem.label);
+  }
+  return false;
 }
