@@ -557,6 +557,7 @@ function getValuesFromPayload(payload, env) {
 
 function labelMonitored(workItem) {
   if (workItem != null) {
+    console.log(['archaeopteryx'].includes(workItem.label));
     return ['archaeopteryx'].includes(workItem.label);
   }
   return false;
