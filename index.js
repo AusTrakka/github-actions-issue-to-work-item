@@ -226,7 +226,7 @@ async function update(vm, workItem) {
 
   if (
     workItem.fields["System.Title"] !=
-    `${vm.title} (GitHub Issue #${vm.number})`
+    "GH-" + vm.number + " " + vm.title
   ) {
     patchDocument.push({
       op: "add",
@@ -406,12 +406,11 @@ async function find(vm) {
   }
 
   let teamContext = { project: vm.env.project };
-
   let wiql = {
     query:
-      "SELECT [System.Id], [System.WorkItemType], [System.Description], [System.Title], [System.AssignedTo], [System.State], [System.Tags] FROM workitems WHERE [System.TeamProject] = @project AND [System.Title] CONTAINS '(GitHub Issue #" +
+      "SELECT [System.Id], [System.WorkItemType], [System.Description], [System.Title], [System.AssignedTo], [System.State], [System.Tags] FROM workitems WHERE [System.TeamProject] = @project AND [System.Title] CONTAINS 'GH-" +
       vm.number +
-      ")' AND [System.Tags] CONTAINS 'GitHub Issue' AND [System.Tags] CONTAINS '" +
+      "' AND [System.Tags] CONTAINS 'GitHub Issue' AND [System.Tags] CONTAINS '" +
       vm.repository +
       "'",
   };
