@@ -92,10 +92,10 @@ async function main() {
         console.log("assigned action is not yet implemented");
         break;
       case "labeled":
-        workItem != null ? await label(vm, workItem) : "";
+        workItem != null && labelMonitored(vm) ? await label(vm, workItem) : "";
         break;
       case "unlabeled":
-        workItem != null ? await unlabel(vm, workItem) : "";
+        workItem != null && labelMonitored(vm) ? await unlabel(vm, workItem) : "";
         break;
       case "deleted":
         console.log("deleted action is not yet implemented");
@@ -226,7 +226,7 @@ async function update(vm, workItem) {
 
   if (
     workItem.fields["System.Title"] !=
-    `${vm.title} (GitHub Issue #${vm.number})`
+    "GH-" + vm.number + " " + vm.title
   ) {
     patchDocument.push({
       op: "add",
@@ -406,12 +406,11 @@ async function find(vm) {
   }
 
   let teamContext = { project: vm.env.project };
-
   let wiql = {
     query:
-      "SELECT [System.Id], [System.WorkItemType], [System.Description], [System.Title], [System.AssignedTo], [System.State], [System.Tags] FROM workitems WHERE [System.TeamProject] = @project AND [System.Title] CONTAINS '(GitHub Issue #" +
+      "SELECT [System.Id], [System.WorkItemType], [System.Description], [System.Title], [System.AssignedTo], [System.State], [System.Tags] FROM workitems WHERE [System.TeamProject] = @project AND [System.Title] CONTAINS 'GH-" +
       vm.number +
-      ")' AND [System.Tags] CONTAINS 'GitHub Issue' AND [System.Tags] CONTAINS '" +
+      "' AND [System.Tags] CONTAINS 'GitHub Issue' AND [System.Tags] CONTAINS '" +
       vm.repository +
       "'",
   };
@@ -554,4 +553,8 @@ function getValuesFromPayload(payload, env) {
   }
 
   return vm;
+}
+
+function labelMonitored(vm) {
+  return ['archaeopteryx'].includes(vm.label);
 }
